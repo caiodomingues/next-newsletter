@@ -10,7 +10,14 @@ export default function Home() {
     e.preventDefault();
     if (email === "" || email.length < 3) return;
 
-    axios.post("/api/subscribe", { email });
+    axios
+      .post("/api/subscribe", { email })
+      .then((res) => {
+        setEmail("");
+      })
+      .catch((err) => {
+        console.err(err);
+      });
   };
 
   return (
