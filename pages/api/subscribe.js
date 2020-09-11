@@ -29,6 +29,12 @@ export default async (request, response) => {
 
   const collection = db.collection("subscribers");
 
+  const verifyUnique = await collection.find({ email: email }).toArray();
+
+  if (verifyUnique.length > 0) {
+    return response.status(400).json({ ok: false });
+  }
+
   await collection.insertOne({
     email,
     subscribedAt: new Date(),

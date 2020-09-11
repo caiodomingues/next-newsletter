@@ -27,8 +27,11 @@ export default function Home() {
         }
       })
       .catch((err) => {
-        console.err(err);
-        setMessage("Ops... Ocorreu o seguinte erro: ", err.message);
+        setLoading(false);
+        console.error(err);
+        setMessage(
+          "Ocorreu um erro inesperado 🙁, tente novamente mais tarde."
+        );
       });
   };
 
