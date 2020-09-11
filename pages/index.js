@@ -5,18 +5,30 @@ import axios from "axios";
 
 export default function Home() {
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (email === "" || email.length < 3) return;
-
+    if (!email || email.length < 3 || loading) return;
+    setLoading(true);
     axios
       .post("/api/subscribe", { email })
       .then((res) => {
         setEmail("");
+        setLoading(false);
+
+        if (res.status === 201) {
+          setMessage("E-mail cadastrado com sucesso ⚽");
+        } else {
+          setMessage(
+            "Ocorreu um erro inesperado 🙁, tente novamente mais tarde."
+          );
+        }
       })
       .catch((err) => {
         console.err(err);
+        setMessage("Ops... Ocorreu o seguinte erro: ", err.message);
       });
   };
 
@@ -43,9 +55,10 @@ export default function Home() {
               placeholder="Seu melhor e-mail"
               className={styles.input}
             />
-            <button type="submit" className={styles.button}>
-              Assinar
+            <button type="submit" disabled={loading} className={styles.button}>
+              {loading ? "Enviando..." : "Assinar"}
             </button>
+            {message && <p>{message}</p>}
           </form>
         </div>
       </main>
